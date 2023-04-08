@@ -67,6 +67,6 @@ class Questtion(models.Model):
 class UserAnswer(models.Model):
     question_id = models.ForeignKey(Questtion,on_delete=models.CASCADE)
     answer = models.TextField()
-
+    user = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     def __str__(self):
         return self.answer
