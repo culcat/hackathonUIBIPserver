@@ -49,6 +49,10 @@ class Candidate(models.Model):
 
     ]
     target = models.CharField(max_length=100, choices=target_list, verbose_name='Выберите направление')
+    practica_from = models.DateTimeField()
+    practica_to = models.DateTimeField()
+    birthday = models.DateTimeField()
+
 
 
 def __str__(self):
@@ -67,6 +71,6 @@ class Questtion(models.Model):
 class UserAnswer(models.Model):
     question_id = models.ForeignKey(Questtion,on_delete=models.CASCADE)
     answer = models.TextField()
-
+    user = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     def __str__(self):
         return self.answer
