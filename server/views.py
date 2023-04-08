@@ -1,7 +1,15 @@
+import secrets
+import uuid
+
+from django.contrib.auth.models import User
 from django.shortcuts import render
+from requests import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+
 from .serializer import *
 from .models import *
-from rest_framework import generics
+from rest_framework import generics, status
 
 
 class QuesttionList(generics.ListAPIView):
@@ -42,3 +50,13 @@ class UserAnswerDetail(generics.RetrieveUpdateDestroyAPIView):
         if self.request.method == 'PUT' or self.request.method == 'PATCH':
             return AnswerSerializer
         return AnswerCreateSerializer
+
+class APIKeyView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        user = request.user
+        key = str(uuid.uuid4())
+        api_key = APIKey.objects.create(user=user, key=key)
+        return Response({'key': api_key.key}, status=status.HTTP_201_CREATED)
+
